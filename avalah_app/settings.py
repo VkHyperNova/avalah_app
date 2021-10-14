@@ -25,11 +25,12 @@ SECRET_KEY = 'django-insecure-y9lx6ad4s&b5ol5^--hh@3an7uxi4(8i1a8#r=rjln_-x8*q$4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
+# ADDED 'rest_framework', 'corsheaders', 'FlowerApp.apps.FlowerappConfig'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,9 +38,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'FlowerApp.apps.FlowerappConfig',
 ]
 
+# ALL DOMAINS ACCES API
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Added 'corsheaders.middleware.CorsMiddleware'
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,7 +89,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'db',
-        'PORT': 5432,
+        'PORT': 5432
 
     }
 }
