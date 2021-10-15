@@ -8,10 +8,14 @@ from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 
 # import my data models and serializers
-from FlowerApp.models import Products, Orders
-from FlowerApp.serializers import ProductsSerializer, OrdersSerializer
+from flowerapp.models import Products, Orders
+from flowerapp.serializers import ProductsSerializer, OrdersSerializer
 
 # Create your views here.
+
+# Adding index page
+def index(request):
+    return render(request, "index.html")
 
 
 # GET, POST, PUT, DELETE for Products
@@ -40,7 +44,7 @@ def productsApi(request,id=0):
     elif request.method == 'PUT':
         
         product_data = JSONParser().parse(request)
-        product = Products.objects.get(ProductId = product_data['ProductId'])
+        product = Products.objects.get(product_id = product_data['product_id'])
         products_serializer = ProductsSerializer(product, data = product_data)
 
         if products_serializer.is_valid():
@@ -53,13 +57,13 @@ def productsApi(request,id=0):
 
     elif request.method == 'DELETE':
 
-        product = Products.objects.get(ProductId = id)
+        product = Products.objects.get(product_id = id)
         product.delete()
 
         return JsonResponse("Deleted Successfully", safe = False)
 
 
-# GET, POST, PUT, DELETE for Orders
+# GET, POST and DELETE for Orders
 @csrf_exempt
 def ordersApi(request,id=0):
     if request.method == 'GET':
@@ -81,11 +85,11 @@ def ordersApi(request,id=0):
             return JsonResponse("Added Successfully", safe=False)
 
         return JsonResponse("Failed to Add", safe=False)
-
+        
     elif request.method == 'PUT':
         
         order_data = JSONParser().parse(request)
-        order = Products.objects.get(ProductId = order_data['ProductId'])
+        order = Products.objects.get(order_id = order_data['order_id'])
         orders_serializer = OrdersSerializer(order, data = order_data)
 
         if orders_serializer.is_valid():
@@ -96,9 +100,10 @@ def ordersApi(request,id=0):
 
         return JsonResponse("Failed to Update")
 
+
     elif request.method == 'DELETE':
 
-        order = Products.objects.get(ProductId = id)
+        order = Products.objects.get(order_id = id)
         order.delete()
 
         return JsonResponse("Deleted Successfully", safe = False)

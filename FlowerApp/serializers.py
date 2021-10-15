@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from FlowerApp.models import Products, Orders
+from flowerapp.models import Products, Orders
 
 
 # Serializer to convert querysets to native Python datatypes
@@ -7,9 +7,9 @@ from FlowerApp.models import Products, Orders
 class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model=Products
-        fields=('ProductId','ProductName','ProductStock','ProductPrice')
+        fields=('product_id','product_name','product_stock','product_price', 'product_popularity')
 
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model=Orders
-        fields=('Time','Product','Quantity','OrderSubtotal','OrderTotal')
+        fields=('order_id','order_time','order_product','order_quantity','order_subtotal','order_total')

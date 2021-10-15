@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'FlowerApp.apps.FlowerappConfig',
+    'flowerapp.apps.FlowerappConfig',
 ]
 
 # ALL DOMAINS ACCES API
