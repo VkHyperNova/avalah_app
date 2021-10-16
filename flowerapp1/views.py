@@ -89,7 +89,7 @@ def ordersApi(request,id=0):
     elif request.method == 'PUT':
         
         order_data = JSONParser().parse(request)
-        order = Products.objects.get(order_id = order_data['order_id'])
+        order = Orders.objects.get(order_id = order_data['order_id'])
         orders_serializer = OrdersSerializer(order, data = order_data)
 
         if orders_serializer.is_valid():
