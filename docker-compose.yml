@@ -8,29 +8,29 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     volumes:
-    # test db1
-      #- ./data/db:/var/lib/postgresql/data
+      # test db1
+      - ./data/db:/var/lib/postgresql/data
 
       # test db2
-      - ./pgdata/db:/var/lib/postgresql/data
+      #- ./pgdata/db:/var/lib/postgresql/data
 
       # postgres db data
       #- ./postgres/db:/var/lib/postgresql/data
 
       # copy the sql script to create tables
-      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      #- ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
       # copy the sql script to fill tables
-      - ./sql/fill_table_products.sql:/docker-entrypoint-initdb.d/fill_table_products.sql
+      #- ./sql/fill_table_products.sql:/docker-entrypoint-initdb.d/fill_table_products.sql
       # copy the sql script to fill tables
-      - ./sql/fill_table_orders.sql:/docker-entrypoint-initdb.d/fill_table_orders.sql
+      #- ./sql/fill_table_orders.sql:/docker-entrypoint-initdb.d/fill_table_orders.sql
     ports:
       - "5438:5432"
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - . :/code
+      - .:/code
     depends_on:
       - db
     ports:
