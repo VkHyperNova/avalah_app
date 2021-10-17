@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-# ADDED 'rest_framework', 'corsheaders', 'FlowerApp.apps.FlowerappConfig'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'flowerapp.apps.FlowerappConfig',
+    'flowerapi.apps.FlowerappConfig',
 ]
+
+
 
 # ALL DOMAINS ACCES API
 CORS_ORIGIN_ALLOW_ALL = True

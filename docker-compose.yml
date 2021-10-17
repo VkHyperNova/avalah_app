@@ -8,21 +8,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     volumes:
-      # test db1
-      #- ./data/db:/var/lib/postgresql/data
-
-      # test db2
-      - ./pgdata/db:/var/lib/postgresql/data
-
+      
       # postgres db data
-      #- ./postgres/db:/var/lib/postgresql/data
+      - ./postgres/db:/var/lib/postgresql/data
 
       # copy the sql script to create tables
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
       # copy the sql script to fill tables
       - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
-
 
     ports:
       - "5438:5432"

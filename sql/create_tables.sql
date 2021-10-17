@@ -1,7 +1,7 @@
 
 
 
-CREATE TABLE IF NOT EXISTS flowerapp_products (
+CREATE TABLE IF NOT EXISTS flowerapi_products (
   product_id serial primary key,
   product_name varchar(250) NOT NULL,
   product_stock INT,
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS flowerapp_products (
   
 );
 
-CREATE TABLE IF NOT EXISTS flowerapp_orders (
+CREATE TABLE IF NOT EXISTS flowerapi_orders (
   order_id serial primary key,
   order_time timestamp DEFAULT(CURRENT_TIMESTAMP),
   order_product varchar(250) NOT NULL,

@@ -3,19 +3,27 @@ from django.shortcuts import render
 # decorator csrf allows other domains to access my api methods
 from django.views.decorators.csrf import csrf_exempt
 
+
 # For parsing to json
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 
 # import my data models and serializers
-from flowerapp.models import Products, Orders
-from flowerapp.serializers import ProductsSerializer, OrdersSerializer
+from flowerapi.models import Products, Orders
+from flowerapi.serializers import ProductsSerializer, OrdersSerializer
+
+# paginator
+from django.core.paginator import Paginator, EmptyPage
+
+
+
+
 
 # Create your views here.
 
 # Adding index page
 def index(request):
-    return render(request, "index.html")
+    return render(request, 'index.html')
 
 
 # GET, POST, PUT, DELETE for Products
@@ -24,9 +32,47 @@ def productsApi(request,id=0):
     if request.method == 'GET':
 
         products = Products.objects.all()
+
+        # URL name to use in template
+        urlname = "products"
+
+        OneItem = ""
+
+        if id != 0:
+            
+            product = Products.objects.filter(product_id = id)
+            
+            product_serializer = ProductsSerializer(product, many=True)
+
+            #urlname = "products/" + id
+
+            products = Products.objects.all().order_by('-product_popularity')
+
+            OneItem = product_serializer.data
+
+
         products_serializer = ProductsSerializer(products, many=True)
 
-        return JsonResponse(products_serializer.data, safe=False)
+        # Get page number and size from url
+        page_size = request.GET.get('size', 5)
+        page_num = request.GET.get('page', 1)
+
+    
+        # Call paginator and give it json and page size
+        p = Paginator(products_serializer.data, page_size)
+
+        # if page does not exist, select page 1
+        try:
+            page = p.page(page_num)
+        except EmptyPage:
+            page = p.page(1)
+
+
+        context = {'items' : page, 'urlname' : urlname, 'pagesize' : page_size, 'OneItem' : OneItem}
+
+
+        return render(request, 'index.html', context)
+
 
     elif request.method == 'POST':
 
@@ -71,7 +117,27 @@ def ordersApi(request,id=0):
         orders = Orders.objects.all()
         orders_serializer = OrdersSerializer(orders, many=True)
 
-        return JsonResponse(orders_serializer.data, safe=False)
+        # URL name to use in template
+        urlname = "orders"
+
+        # Get page number and size from url
+        page_size = request.GET.get('size', 5)
+        page_num = request.GET.get('page', 1)
+
+        # Call paginator and give it json and page size
+        p = Paginator(orders_serializer.data, page_size)
+
+        # if page does not exist, select page 1
+        try:
+            page = p.page(page_num)
+        except EmptyPage:
+            page = p.page(1)
+
+
+        context = {'items' : page, 'urlname' : urlname, 'pagesize' : page_size}
+
+        return render(request, 'index.html', context)
+
 
     elif request.method == 'POST':
 

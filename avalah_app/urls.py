@@ -19,10 +19,10 @@ from django.urls import path
 # include urls.py from FlowerApp
 from django.conf.urls import url,include
 
-from flowerapp.views import index
+from flowerapi.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name="index"),
-    url(r'^',include('flowerapp.urls'))
+    url(r'^',include('flowerapi.urls'))
 ]

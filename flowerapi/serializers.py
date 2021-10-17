@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from flowerapp.models import Products, Orders
+from flowerapi.models import Products, Orders
 
 
 # Serializer to convert querysets to native Python datatypes

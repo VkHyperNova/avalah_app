@@ -1,0 +1,37 @@
+<h1>avalah app</h1>
+
+<!-- Check if query has id -->
+{% if OneItem != "" %}
+
+<p><strong>Selected product:</strong></p>
+
+    <!-- Print one item by id -->
+    {% for item in OneItem %}
+    <pre>{{ item | pprint }}</pre> <br />
+    {% endfor %}
+
+<p><strong>Related products by popularity:</strong></p>
+
+{% endif %}
+
+
+
+<!-- Print all items -->
+{% for item in items %}
+<pre>{{ item | pprint }}</pre>
+{% endfor %}
+
+
+
+
+<!-- Page buttons -->
+{% if items.has_previous %}
+<a href="{% url urlname %}?page={{items.previous_page_number}}&size={{pagesize}}">Previous Page</a>
+{% endif %}
+
+{% if items.has_next %}
+<a href="{% url urlname %}?page={{items.next_page_number}}&size={{pagesize}}">Next Page</a>
+{% endif %}
+
+<!-- Show page number -->
+<pre>{{ items | pprint }}</pre>
