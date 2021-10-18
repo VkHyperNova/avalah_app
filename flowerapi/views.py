@@ -3,21 +3,12 @@ from django.shortcuts import render
 # decorator csrf allows other domains to access my api methods
 from django.views.decorators.csrf import csrf_exempt
 
-
-# For parsing to json
-from rest_framework.parsers import JSONParser
-from django.http.response import JsonResponse
-
 # import my data models and serializers
 from flowerapi.models import Products, Orders
 from flowerapi.serializers import ProductsSerializer, OrdersSerializer
 
 # paginator
 from django.core.paginator import Paginator, EmptyPage
-
-
-from pprint import pprint as pp_pprint
-
 
 # Create your views here.
 
@@ -29,7 +20,6 @@ def index(request):
 # GET endpoint for products
 @csrf_exempt
 def productsApi(request,id=0):
-    if request.method == 'GET':
 
         # Get all products
         products = Products.objects.all()
@@ -41,23 +31,30 @@ def productsApi(request,id=0):
         # URL name to use in template
         urlname = "products"
 
-        one_product = ""
+        product_by_id = ""
+
+        msg = ""
 
         if id != 0:
             
-            # Get product by id
-            product = Products.objects.filter(product_id = id)
+            # Check if id exist in db
+            if Products.objects.filter(product_id = id).exists():
+                # Get product by id
+                product = Products.objects.filter(product_id = id)
+            else:
+                msg = "ID: " + id + " does not exist in db"
+                # Set product id to 1
+                product = Products.objects.filter(product_id = 1)
 
             Category = ""
 
             # Get product Category
             for e in product:
                Category = e.product_category
-
-            
+          
             product_serializer = ProductsSerializer(product, many=True)
 
-            one_product = product_serializer.data
+            product_by_id = product_serializer.data
 
             # Find related products
             products = Products.objects.filter(product_category = Category).order_by('-product_popularity')
@@ -67,31 +64,26 @@ def productsApi(request,id=0):
 
 
         products_serializer = ProductsSerializer(products, many=True)
-    
+
         # Call paginator and give it json and page size
         p = Paginator(products_serializer.data, page_size)
 
         # if page does not exist, select page 1
         try:
-            page = p.page(page_num)
+            items = p.page(page_num)
         except EmptyPage:
-            page = p.page(1)
+            items = p.page(1)
 
-
-        context = {'items' : page, 'urlname' : urlname, 'pagesize' : page_size, 'one_product' : one_product}
-
+        context = {'items' : items, 'urlname' : urlname, 'product_by_id' : product_by_id, 'msg' : msg}
 
         return render(request, 'index.html', context)
 
-
 # GET endpoint for Orders
 @csrf_exempt
-def ordersApi(request,id=0):
-    if request.method == 'GET':
+def ordersApi(request):
 
         # Get all orders
-        orders = Orders.objects.all()
-        orders_serializer = OrdersSerializer(orders, many=True)
+        orders_serializer = OrdersSerializer(Orders.objects.all(), many=True)
 
         # URL name to use in template
         urlname = "orders"
@@ -105,12 +97,11 @@ def ordersApi(request,id=0):
 
         # if page does not exist, select page 1
         try:
-            page = p.page(page_num)
+            items = p.page(page_num)
         except EmptyPage:
-            page = p.page(1)
+            items = p.page(1)
 
-
-        context = {'items' : page, 'urlname' : urlname, 'pagesize' : page_size}
+        context = {'items' : items, 'urlname' : urlname}
 
         return render(request, 'index.html', context)
 

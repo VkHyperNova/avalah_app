@@ -7,8 +7,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
-    volumes:
-      
+    volumes:     
       # postgres db data
       - ./postgres/db:/var/lib/postgresql/data
 
@@ -16,7 +15,7 @@ services:
       - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
 
       # copy the sql script to fill
-
+      - ./sql/fill_tables.sql:/docker-entrypoint-initdb.d/fill_tables.sql
     ports:
       - "5438:5432"
   web:

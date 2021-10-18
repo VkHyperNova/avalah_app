@@ -3,37 +3,38 @@
 <a href="{% url 'products' %}?page=1&size=5">Products</a>
 <a href="{% url 'orders' %}?page=1&size=5">Orders</a>
 
+
+<!-- msg if id does not exist -->
+{% if msg != "" %}
+<h1 style="color: red">{{msg}}</h1>
+{% endif %}
+
 <!-- Check if query has id -->
-{% if one_product != "" and urlname != 'orders' and urlname == 'products' %}
+{% if product_by_id != "" and urlname != 'orders' and urlname == 'products' %}
 
 <p><strong>Selected product:</strong></p>
 
     <!-- Print one item by id -->
-    {% for item in one_product %}
+    {% for item in product_by_id %}
     <pre>{{ item | pprint }}</pre> <br />
     {% endfor %}
 
-<p><strong>Related (Same Category) Products by Popularity (found:{{pagesize}}):</strong></p>
+<p><strong>Related (Same Category) Products by Popularity (found:{{items|length}}):</strong></p>
 
 {% endif %}
-
-
 
 <!-- Print all items -->
 {% for item in items %}
 <pre>{{ item | pprint }}</pre>
 {% endfor %}
 
-
-
-
 <!-- Page buttons -->
 {% if items.has_previous %}
-<a href="{% url urlname %}?page={{items.previous_page_number}}&size={{pagesize}}">Previous Page</a>
+<a href="{% url urlname %}?page={{items.previous_page_number}}&size={{items|length}}">Previous Page</a>
 {% endif %}
 
 {% if items.has_next %}
-<a href="{% url urlname %}?page={{items.next_page_number}}&size={{pagesize}}">Next Page</a>
+<a href="{% url urlname %}?page={{items.next_page_number}}&size={{items|length}}">Next Page</a>
 {% endif %}
 
 <!-- Show page number -->
