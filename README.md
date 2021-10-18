@@ -1,61 +1,60 @@
 # avalah_app with Postgresql + Django
 
 
-1) Clone the project and start Docker in bg
+### 1. Clone the project and start Docker in bg
 
--> git clone https://github.com/VkHyperNova/avalah_app.git
+- _git clone https://github.com/VkHyperNova/avalah_app.git_
 
-2) Go to project folder and open terminal
+### 2. Go to project folder and in terminal type:
 
-- (Run:)
--> docker-compose up --build
+- _docker-compose up --build_
 
-When its done press
--> CTRL + C (to close)
+### 3. When its done press
 
-And Run:
--> docker-compose up
+- _CTRL + C_ **(to close)**
 
-In Browser Goto:
--> 127.0.0.1:8000 (it should say: avalah app)
+### 4. And Run:
 
-3) About mock data:
+- _docker-compose up_
 
-- I created a folder named 'sql'
-- There are 2 files: 'create_tables.sql' and 'fill_tables.sql'
+### 5. In Browser Goto:
 
-NB! They run automatically when the project is created. The commands are in docker-compose.yml under -> db -> volumes.
+- _http://127.0.0.1:8000_ **(it should say: avalah app)**
 
-- You can run the fill_tables.sql from commandline while project is running (if you want more data)
+### 6. About mock data:
 
-(Open new commandline in project folder)
-
--> docker exec -u postgres avalah_app-db-1 psql postgres postgres -f docker-entrypoint-initdb.d/fill_tables.sql
-
-4) APIS
-
-- List of all products (in paginated manner)
+ I created a folder named **_'sql'_**. There are 2 files: **_'create_tables.sql'_** and **_'fill_tables.sql'_**
 
 
-In browser type:
+**_NB!_** They run automatically when the project is created. The commands are in **_docker-compose.yml_** under -> **_db_** -> **_volumes_**.
 
-(To return product list with default page number(1) and size(5))
+**If you want more data you can run the _fill_tables.sql_ from commandline while project is running**
 
--> http://127.0.0.1:8000/products
+_Open new commandline in project folder:_
 
-(For custom page number and size edit numbers in '?page=2&size=3' part of url)
+- _docker exec -u postgres avalah_app-db-1 psql postgres postgres -f docker-entrypoint-initdb.d/fill_tables.sql_
 
--> http://127.0.0.1:8000/products?page=2&size=3
+### 7. APIS
+
+ **a) List of all products (in paginated manner)**
+
+_In browser type:_
+
+- _http://127.0.0.1:8000/products_
+
+_For custom page number and size edit numbers in **'?page=2&size=3'** part of url_
+
+- _http://127.0.0.1:8000/products?page=2&size=3_
 
 
-- List of all orders (0)
+**b) List of all orders (0)**
 
--> http://127.0.0.1:8000/orders
+- _http://127.0.0.1:8000/orders_
 
--> http://127.0.0.1:8000/orders?page=2&size=3
+- _http://127.0.0.1:8000/orders?page=2&size=3_
 
 
-- Finds related products given a product identifier
+**c) Finds related products given a product identifier**
 
--> http://127.0.0.1:8000/products/5
+- _http://127.0.0.1:8000/products/5_
 
