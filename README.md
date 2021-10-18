@@ -7,7 +7,7 @@
 
 2) Go to project folder and open terminal
 
-Run:
+- Run:
 -> docker-compose up --build
 
 When its done press
