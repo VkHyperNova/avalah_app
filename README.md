@@ -1,7 +1,7 @@
-# avalah_app with postgresql + Django
+# avalah_app with Postgresql + Django
 
 
-1) Clone the project https://github.com/VkHyperNova/avalah_app
+1) Clone the project and start Docker in bg
 
 -> git clone https://github.com/VkHyperNova/avalah_app.git
 
@@ -24,7 +24,7 @@ In Browser Goto:
 - I created a folder named 'sql'
 - There are 2 files: 'create_tables.sql' and 'fill_tables.sql'
 
-NB! They run automatically when the project is created. The commands are in docker-compose.yml under db volumes.
+NB! They run automatically when the project is created. The commands are in docker-compose.yml under -> db -> volumes.
 
 - You can run the fill_tables.sql from commandline while project is running (if you want more data)
 
