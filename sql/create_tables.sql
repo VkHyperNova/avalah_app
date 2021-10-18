@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS flowerapi_products (
   product_name varchar(250) NOT NULL,
   product_stock INT,
   product_price FLOAT,
-  product_popularity INT
+  product_popularity INT,
+  product_category varchar(250) NOT NULL
   
 );
 

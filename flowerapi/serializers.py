@@ -7,7 +7,7 @@ from flowerapi.models import Products, Orders
 class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model=Products
-        fields=('product_id','product_name','product_stock','product_price', 'product_popularity')
+        fields=('product_id','product_name','product_stock','product_price', 'product_popularity', 'product_category')
 
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:

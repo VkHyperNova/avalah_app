@@ -2,8 +2,12 @@
 do $$
 begin
    for grow in 1..20 loop
-    insert into public.flowerapi_products (product_name, product_stock, product_price, product_popularity)
-	values ('Flower' || grow, floor(random() * 10000 + 1),floor(random() * 10 + 1) + ROUND(random()::numeric,1), floor(random() * 1000 + 1));
+    insert into public.flowerapi_products (product_name, product_stock, product_price, product_popularity, product_category)
+	values ('Flower' || grow,
+    floor(random() * 10000 + 1),
+    floor(random() * 10 + 1) + ROUND(random()::numeric,1),
+    floor(random() * 1000 + 1),
+    'Category' || floor(random() * 5 + 1));
    end loop;
    
    for grow in 1..50 loop

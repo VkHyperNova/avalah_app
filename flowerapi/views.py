@@ -16,7 +16,7 @@ from flowerapi.serializers import ProductsSerializer, OrdersSerializer
 from django.core.paginator import Paginator, EmptyPage
 
 
-
+from pprint import pprint as pp_pprint
 
 
 # Create your views here.
@@ -26,37 +26,47 @@ def index(request):
     return render(request, 'index.html')
 
 
-# GET, POST, PUT, DELETE for Products
+# GET endpoint for products
 @csrf_exempt
 def productsApi(request,id=0):
     if request.method == 'GET':
 
+        # Get all products
         products = Products.objects.all()
-
-        # URL name to use in template
-        urlname = "products"
-
-        OneItem = ""
-
-        if id != 0:
-            
-            product = Products.objects.filter(product_id = id)
-            
-            product_serializer = ProductsSerializer(product, many=True)
-
-            #urlname = "products/" + id
-
-            products = Products.objects.all().order_by('-product_popularity')
-
-            OneItem = product_serializer.data
-
-
-        products_serializer = ProductsSerializer(products, many=True)
 
         # Get page number and size from url
         page_size = request.GET.get('size', 5)
         page_num = request.GET.get('page', 1)
 
+        # URL name to use in template
+        urlname = "products"
+
+        one_product = ""
+
+        if id != 0:
+            
+            # Get product by id
+            product = Products.objects.filter(product_id = id)
+
+            Category = ""
+
+            # Get product Category
+            for e in product:
+               Category = e.product_category
+
+            
+            product_serializer = ProductsSerializer(product, many=True)
+
+            one_product = product_serializer.data
+
+            # Find related products
+            products = Products.objects.filter(product_category = Category).order_by('-product_popularity')
+
+            # Set page size to fit all related products
+            page_size = len(products)
+
+
+        products_serializer = ProductsSerializer(products, many=True)
     
         # Call paginator and give it json and page size
         p = Paginator(products_serializer.data, page_size)
@@ -68,52 +78,18 @@ def productsApi(request,id=0):
             page = p.page(1)
 
 
-        context = {'items' : page, 'urlname' : urlname, 'pagesize' : page_size, 'OneItem' : OneItem}
+        context = {'items' : page, 'urlname' : urlname, 'pagesize' : page_size, 'one_product' : one_product}
 
 
         return render(request, 'index.html', context)
 
 
-    elif request.method == 'POST':
-
-        product_data = JSONParser().parse(request)
-        products_serializer = ProductsSerializer(data=product_data)
-
-        if products_serializer.is_valid():
-
-            products_serializer.save()
-
-            return JsonResponse("Added Successfully", safe=False)
-
-        return JsonResponse("Failed to Add", safe=False)
-
-    elif request.method == 'PUT':
-        
-        product_data = JSONParser().parse(request)
-        product = Products.objects.get(product_id = product_data['product_id'])
-        products_serializer = ProductsSerializer(product, data = product_data)
-
-        if products_serializer.is_valid():
-
-            products_serializer.save()
-
-            return JsonResponse("Updated Successfully", safe = False)
-
-        return JsonResponse("Failed to Update")
-
-    elif request.method == 'DELETE':
-
-        product = Products.objects.get(product_id = id)
-        product.delete()
-
-        return JsonResponse("Deleted Successfully", safe = False)
-
-
-# GET, POST and DELETE for Orders
+# GET endpoint for Orders
 @csrf_exempt
 def ordersApi(request,id=0):
     if request.method == 'GET':
 
+        # Get all orders
         orders = Orders.objects.all()
         orders_serializer = OrdersSerializer(orders, many=True)
 
@@ -139,37 +115,4 @@ def ordersApi(request,id=0):
         return render(request, 'index.html', context)
 
 
-    elif request.method == 'POST':
-
-        order_data = JSONParser().parse(request)
-        orders_serializer = OrdersSerializer(data=order_data)
-
-        if orders_serializer.is_valid():
-
-            orders_serializer.save()
-
-            return JsonResponse("Added Successfully", safe=False)
-
-        return JsonResponse("Failed to Add", safe=False)
-        
-    elif request.method == 'PUT':
-        
-        order_data = JSONParser().parse(request)
-        order = Orders.objects.get(order_id = order_data['order_id'])
-        orders_serializer = OrdersSerializer(order, data = order_data)
-
-        if orders_serializer.is_valid():
-
-            orders_serializer.save()
-
-            return JsonResponse("Updated Successfully", safe = False)
-
-        return JsonResponse("Failed to Update")
-
-
-    elif request.method == 'DELETE':
-
-        order = Products.objects.get(order_id = id)
-        order.delete()
-
-        return JsonResponse("Deleted Successfully", safe = False)
+    
