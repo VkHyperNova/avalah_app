@@ -7,16 +7,20 @@
 
 2) Go to project folder and open terminal
 
-Run:
+- Run:
+
 -> docker-compose up --build
 
 When its done press
+
 -> CTRL + C (to close)
 
 And Run:
+
 -> docker-compose up
 
 In Browser Goto:
+
 -> 127.0.0.1:8000 (it should say: avalah app)
 
 3) About mock data:
