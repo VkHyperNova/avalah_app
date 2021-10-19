@@ -9,7 +9,7 @@
 
 - _docker-compose up --build_
 
-### 3. When its done press
+### 3. When its done press (should say: database system is ready to accept connections)
 
 - _CTRL + C_ **(to close)**
 
@@ -19,16 +19,16 @@
 
 ### 5. In Browser Goto:
 
-- _http://127.0.0.1:8000_ **(it should say: avalah app)**
+- _http://127.0.0.1:8000_ **(NB! Not '0.0.0.0:8000' like it says in console)**
 
 ### 6. About mock data:
 
  I created a folder named **_'sql'_**. There are 2 files: **_'create_tables.sql'_** and **_'fill_tables.sql'_**
 
 
-**_NB!_** They run automatically when the project is created. The commands are in **_docker-compose.yml_** under -> **_db_** -> **_volumes_**.
+**_NB!_** They run automatically when the project is created. It's definned in **_docker-compose.yml_** under -> **_db_** -> **_volumes_**.
 
-**If you want more data you can run the _fill_tables.sql_ from commandline while project is running**
+### **(OPTIONAL) If you want more data you can run the _fill_tables.sql_ from commandline while project is running**
 
 _Open new commandline in project folder:_
 
