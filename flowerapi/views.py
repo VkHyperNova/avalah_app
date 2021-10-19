@@ -16,6 +16,7 @@ import random
 
 # Adding index page
 def index(request):
+    nr = str(random.randint(1, 20))
     return render(request, 'index.html', {'random_id' : nr,})
 
 # Get product by id
@@ -24,7 +25,8 @@ def GetProductsById(request, id):
 
     # URL name to use in template
     urlname = "products"
-   
+
+    nr = str(random.randint(1, 20))
     # Check if id exist in db
     if Products.objects.filter(product_id = id).exists():
         # Get product by id
@@ -71,6 +73,7 @@ def GetProductsById(request, id):
 # Get all products
 @csrf_exempt
 def GetProducts(request):
+    nr = str(random.randint(1, 20))
 
     # URL name to use in template
     urlname = "products"
@@ -88,6 +91,7 @@ def GetProducts(request):
 # GET all orders
 @csrf_exempt
 def GetOrders(request):
+    nr = str(random.randint(1, 20))
 
     # URL name to use in template
     urlname = "orders"
@@ -120,12 +124,4 @@ def Paginate(request, data):
 
     return items
 
-# Random id
-def GenerateRandomId():
-    # Get max id possible
-    max_id = Products.objects.last().product_id
-    global nr
-    nr = str(random.randint(1, max_id))
 
-# Call random id generator, so the other functions can use 'nr' variable
-GenerateRandomId()
