@@ -5,8 +5,8 @@
 
 
 <!-- msg if id does not exist -->
-{% if msg != "" %}
-<h1 style="color: red">{{msg}}</h1>
+{% if msg %}
+<h1 style="color: red">{{msg}} Maximum ID: {{max_id}}</h1>
 {% endif %}
 
 <!-- Check if query has id -->

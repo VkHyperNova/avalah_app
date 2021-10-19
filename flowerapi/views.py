@@ -23,16 +23,20 @@ def GetProductsById(request, id):
     # URL name to use in template
     urlname = "products"
 
-    msg = ""
-
     # Check if id exist in db
     if Products.objects.filter(product_id = id).exists():
         # Get product by id
         product = Products.objects.filter(product_id = id)
     else:
-        msg = "ID: " + id + " does not exist in db"
-        # Set product id to 1
-        product = Products.objects.filter(product_id = 1)
+        # Tell user 
+        msg = "ID: " + id + " does not exist in db !!!"
+
+        # Get max id possible
+        max_id = Products.objects.last().product_id
+
+        context = {'msg' : msg, 'max_id' : max_id}
+        
+        return render(request, 'index.html', context)
 
     Category = ""
 
@@ -55,7 +59,7 @@ def GetProductsById(request, id):
     # Get the page size from url
     page_size = request.GET.get('size', 5)
 
-    context = {'items' : items, 'urlname' : urlname, 'product' : product_serializer.data, 'msg' : msg, 'id' : id, 'page_size' : page_size}
+    context = {'items' : items, 'urlname' : urlname, 'product' : product_serializer.data, 'id' : id, 'page_size' : page_size}
 
     return render(request, 'index.html', context)
 
@@ -103,7 +107,7 @@ def Paginate(request, data):
     page_num = request.GET.get('page', 1)
     page_size = request.GET.get('size', 5)
 
-    # Call paginator and give it json and page size
+    # Call paginator and give it data and page size
     p = Paginator(data, page_size)
 
     # if page does not exist, select page 1
