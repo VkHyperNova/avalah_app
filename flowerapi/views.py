@@ -24,7 +24,7 @@ def GetProductsById(request, id):
 
     # URL name to use in template
     urlname = "products"
-    nr = random.randint(1, 20)
+   
     # Check if id exist in db
     if Products.objects.filter(product_id = id).exists():
         # Get product by id
