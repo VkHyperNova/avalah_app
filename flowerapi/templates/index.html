@@ -10,16 +10,16 @@
 {% endif %}
 
 <!-- Check if query has id -->
-{% if product_by_id != "" and urlname != 'orders' and urlname == 'products' %}
+{% if urlname == 'products' and product|length == 1 %}
 
 <p><strong>Selected product:</strong></p>
 
     <!-- Print one item by id -->
-    {% for item in product_by_id %}
+    {% for item in product %}
     <pre>{{ item | pprint }}</pre> <br />
     {% endfor %}
 
-<p><strong>Related (Same Category) Products by Popularity (found:{{items|length}}):</strong></p>
+<p><strong>Related (Same Category) Products by Popularity (count:{{items|length}}):</strong></p>
 
 {% endif %}
 
@@ -28,12 +28,17 @@
 <pre>{{ item | pprint }}</pre>
 {% endfor %}
 
-<!-- Page buttons -->
-{% if items.has_previous %}
+
+
+{% if product|length == 1 and items.has_previous %}
+<a href="{% url urlname id %}?page={{items.previous_page_number}}&size={{page_size}}">Previous Page</a>
+{% elif items.has_previous %}
 <a href="{% url urlname %}?page={{items.previous_page_number}}&size={{items|length}}">Previous Page</a>
 {% endif %}
 
-{% if items.has_next %}
+{% if product|length == 1 and items.has_next %}
+<a href="{% url urlname id %}?page={{items.next_page_number}}&size={{page_size}}">Next Page</a>
+{% elif items.has_next %}
 <a href="{% url urlname %}?page={{items.next_page_number}}&size={{items|length}}">Next Page</a>
 {% endif %}
 

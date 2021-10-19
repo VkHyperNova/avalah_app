@@ -16,94 +16,100 @@ from django.core.paginator import Paginator, EmptyPage
 def index(request):
     return render(request, 'index.html')
 
-
-# GET endpoint for products
+# Get product by id
 @csrf_exempt
-def productsApi(request,id=0):
+def GetProductsById(request, id):
 
-        # Get all products
-        products = Products.objects.all()
+    # URL name to use in template
+    urlname = "products"
 
-        # Get page number and size from url
-        page_size = request.GET.get('size', 5)
-        page_num = request.GET.get('page', 1)
+    msg = ""
 
-        # URL name to use in template
-        urlname = "products"
+    # Check if id exist in db
+    if Products.objects.filter(product_id = id).exists():
+        # Get product by id
+        product = Products.objects.filter(product_id = id)
+    else:
+        msg = "ID: " + id + " does not exist in db"
+        # Set product id to 1
+        product = Products.objects.filter(product_id = 1)
 
-        product_by_id = ""
+    Category = ""
 
-        msg = ""
+    # Get product Category
+    for e in product:
+        Category = e.product_category
 
-        if id != 0:
-            
-            # Check if id exist in db
-            if Products.objects.filter(product_id = id).exists():
-                # Get product by id
-                product = Products.objects.filter(product_id = id)
-            else:
-                msg = "ID: " + id + " does not exist in db"
-                # Set product id to 1
-                product = Products.objects.filter(product_id = 1)
+    # Serialize selected product
+    product_serializer = ProductsSerializer(product, many=True)
 
-            Category = ""
+    # Find related products and exclude selected product
+    Related_products = Products.objects.filter(product_category = Category).exclude(product_id = id).order_by('-product_popularity')
 
-            # Get product Category
-            for e in product:
-               Category = e.product_category
-          
-            product_serializer = ProductsSerializer(product, many=True)
+    # Serialize Related products
+    products_serializer = ProductsSerializer(Related_products, many=True)
 
-            product_by_id = product_serializer.data
+    # Paginate Related products
+    items = Paginate(request, products_serializer.data) 
 
-            # Find related products
-            products = Products.objects.filter(product_category = Category).order_by('-product_popularity')
+    # Get the page size from url
+    page_size = request.GET.get('size', 5)
 
-            # Set page size to fit all related products
-            page_size = len(products)
+    context = {'items' : items, 'urlname' : urlname, 'product' : product_serializer.data, 'msg' : msg, 'id' : id, 'page_size' : page_size}
+
+    return render(request, 'index.html', context)
 
 
-        products_serializer = ProductsSerializer(products, many=True)
 
-        # Call paginator and give it json and page size
-        p = Paginator(products_serializer.data, page_size)
 
-        # if page does not exist, select page 1
-        try:
-            items = p.page(page_num)
-        except EmptyPage:
-            items = p.page(1)
-
-        context = {'items' : items, 'urlname' : urlname, 'product_by_id' : product_by_id, 'msg' : msg}
-
-        return render(request, 'index.html', context)
-
-# GET endpoint for Orders
+# Get all products
 @csrf_exempt
-def ordersApi(request):
+def GetProducts(request):
 
-        # Get all orders
-        orders_serializer = OrdersSerializer(Orders.objects.all(), many=True)
+    # URL name to use in template
+    urlname = "products"
 
-        # URL name to use in template
-        urlname = "orders"
+    # Serialize all products
+    products_serializer = ProductsSerializer(Products.objects.all(), many=True)
 
-        # Get page number and size from url
-        page_size = request.GET.get('size', 5)
-        page_num = request.GET.get('page', 1)
+    # Paginate
+    items = Paginate(request, products_serializer.data) 
 
-        # Call paginator and give it json and page size
-        p = Paginator(orders_serializer.data, page_size)
+    context = {'items' : items, 'urlname' : urlname}
 
-        # if page does not exist, select page 1
-        try:
-            items = p.page(page_num)
-        except EmptyPage:
-            items = p.page(1)
+    return render(request, 'index.html', context)
 
-        context = {'items' : items, 'urlname' : urlname}
+# GET all orders
+@csrf_exempt
+def GetOrders(request):
 
-        return render(request, 'index.html', context)
+    # URL name to use in template
+    urlname = "orders"
+
+    # Get all orders and serialize
+    orders_serializer = OrdersSerializer(Orders.objects.all(), many=True)
+
+    # Paginate
+    items = Paginate(request, orders_serializer.data)
+
+    context = {'items' : items, 'urlname' : urlname}
+
+    return render(request, 'index.html', context)
 
 
-    
+def Paginate(request, data):
+
+    # Get page number and size from url
+    page_num = request.GET.get('page', 1)
+    page_size = request.GET.get('size', 5)
+
+    # Call paginator and give it json and page size
+    p = Paginator(data, page_size)
+
+    # if page does not exist, select page 1
+    try:
+        items = p.page(page_num)
+    except EmptyPage:
+        items = p.page(1)
+
+    return items
