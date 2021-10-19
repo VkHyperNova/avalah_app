@@ -40,9 +40,15 @@ _Open new commandline in project folder:_
 
 _In browser type:_
 
+_Display all products_
+
 - _http://127.0.0.1:8000/products_
 
-_For custom page number and size edit numbers in **'?page=2&size=3'** part of url_
+_Custom page size (size=3)_
+
+- _http://127.0.0.1:8000/products?size=3_
+
+_Custom page number and size (page=2, size=3)_
 
 - _http://127.0.0.1:8000/products?page=2&size=3_
 
@@ -51,10 +57,26 @@ _For custom page number and size edit numbers in **'?page=2&size=3'** part of ur
 
 - _http://127.0.0.1:8000/orders_
 
+_Custom page size (size=3)_
+
+- _http://127.0.0.1:8000/orders?size=3_
+
+_Custom page number and size (page=2, size=3)_
+
 - _http://127.0.0.1:8000/orders?page=2&size=3_
 
 
 **c) Finds related products given a product identifier**
 
+_Sample Product with id 5_
+
 - _http://127.0.0.1:8000/products/5_
+
+_Custom page size (size=3)_
+
+- _http://127.0.0.1:8000/products/5?size=3_
+ 
+_Custom page number and size (page=1, size=2)_
+
+- _http://127.0.0.1:8000/products/5?page=1&size=2_
 
