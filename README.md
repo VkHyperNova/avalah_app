@@ -26,7 +26,7 @@
  I created a folder named **_'sql'_**. There are 2 files: **_'create_tables.sql'_** and **_'fill_tables.sql'_**
 
 
-**_NB!_** They run automatically when the project is created. It's definned in **_docker-compose.yml_** under -> **_db_** -> **_volumes_**.
+**_NB!_** They run automatically when the project is created. It's defined in **_docker-compose.yml_** under -> **_db_** -> **_volumes_**.
 
 ### **(OPTIONAL) If you want more data you can run the _fill_tables.sql_ from commandline while project is running**
 
