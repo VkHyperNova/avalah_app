@@ -9,12 +9,14 @@ from flowerapi.serializers import ProductsSerializer, OrdersSerializer
 
 # paginator
 from django.core.paginator import Paginator, EmptyPage
+import random
+
 
 # Create your views here.
 
 # Adding index page
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'random_id' : nr,})
 
 # Get product by id
 @csrf_exempt
@@ -22,7 +24,7 @@ def GetProductsById(request, id):
 
     # URL name to use in template
     urlname = "products"
-
+    nr = random.randint(1, 20)
     # Check if id exist in db
     if Products.objects.filter(product_id = id).exists():
         # Get product by id
@@ -59,7 +61,7 @@ def GetProductsById(request, id):
     # Get the page size from url
     page_size = request.GET.get('size', 5)
 
-    context = {'items' : items, 'urlname' : urlname, 'product' : product_serializer.data, 'id' : id, 'page_size' : page_size}
+    context = {'items' : items, 'urlname' : urlname, 'product' : product_serializer.data, 'id' : id, 'page_size' : page_size, 'random_id' : nr}
 
     return render(request, 'index.html', context)
 
@@ -79,7 +81,7 @@ def GetProducts(request):
     # Paginate
     items = Paginate(request, products_serializer.data) 
 
-    context = {'items' : items, 'urlname' : urlname}
+    context = {'items' : items, 'urlname' : urlname, 'random_id' : nr}
 
     return render(request, 'index.html', context)
 
@@ -96,11 +98,11 @@ def GetOrders(request):
     # Paginate
     items = Paginate(request, orders_serializer.data)
 
-    context = {'items' : items, 'urlname' : urlname}
+    context = {'items' : items, 'urlname' : urlname, 'random_id' : nr}
 
     return render(request, 'index.html', context)
 
-
+# Make pages and sizes
 def Paginate(request, data):
 
     # Get page number and size from url
@@ -117,3 +119,13 @@ def Paginate(request, data):
         items = p.page(1)
 
     return items
+
+# Random id
+def GenerateRandomId():
+    # Get max id possible
+    max_id = Products.objects.last().product_id
+    global nr
+    nr = str(random.randint(1, max_id))
+
+# Call random id generator, so the other functions can use 'nr' variable
+GenerateRandomId()
